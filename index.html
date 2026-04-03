@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAINWAVE MD | SECURE PAIRING</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Styling */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: #030303; 
+            color: #00f3ff; 
+            font-family: 'Share Tech Mono', monospace; 
+            min-height: 100vh;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 60%),
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+        }
+
+        /* Scanline Effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 243, 255, 0.03);
+            animation: scanline 6s linear infinite;
+            pointer-events: none;
+            z-index: 999;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Layout Container */
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 95%;
+            max-width: 1000px;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        /* Panels */
+        .panel {
+            background: rgba(0, 10, 15, 0.85);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            border-radius: 8px;
+            padding: 30px;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        .panel::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 30px; height: 30px;
+            border-top: 2px solid #00f3ff; border-left: 2px solid #00f3ff;
+            border-top-left-radius: 8px;
+        }
+        .panel::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 30px; height: 30px;
+            border-bottom: 2px solid #00f3ff; border-right: 2px solid #00f3ff;
+            border-bottom-right-radius: 8px;
+        }
+
+        /* Left Side: Bot Info */
+        .info-panel {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .info-header { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 0 10px #00f3ff; margin-bottom: 20px; }
+        .status-list { list-style: none; margin-bottom: 20px; }
+        .status-list li { margin-bottom: 10px; font-size: 14px; display: flex; align-items: center; }
+        .status-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; display: inline-block; margin-right: 10px; box-shadow: 0 0 8px #00ff00; animation: blink 2s infinite; }
+        
+        .features { font-size: 13px; color: #888; border-top: 1px dashed rgba(0, 243, 255, 0.3); padding-top: 15px; }
+
+        /* Right Side: Pairing Console */
+        .console-panel {
+            flex: 2;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        h2 { font-family: 'Orbitron', sans-serif; font-size: 20px; letter-spacing: 3px; margin-bottom: 10px; color: #fff; }
+        .subtitle { font-size: 12px; color: #7df9ff; margin-bottom: 25px; letter-spacing: 2px; opacity: 0.8; }
+
+        /* Inputs & Buttons */
+        input {
+            width: 80%;
+            padding: 15px;
+            background: rgba(0, 243, 255, 0.05);
+            border: 1px solid #00f3ff;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 3px;
+            outline: none;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        input:focus { box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); background: rgba(0, 243, 255, 0.1); }
+
+        button {
+            width: 80%;
+            padding: 15px;
+            background: transparent;
+            border: 2px solid #00f3ff;
+            color: #00f3ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background: #00f3ff; color: #000; box-shadow: 0 0 20px #00f3ff; }
+
+        /* Terminal Logs */
+        .terminal {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            height: 120px;
+            width: 80%;
+            margin: 20px auto 0;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+            overflow-y: hidden;
+            color: #00ff00;
+        }
+        .log-line { margin-bottom: 4px; opacity: 0.8; }
+        
+        /* Final Output */
+        #codeDisplay {
+            margin-top: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 38px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px #00f3ff;
+            display: none;
+        }
+
+        .dev-tag { margin-top: 20px; font-size: 10px; opacity: 0.5; letter-spacing: 1px; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        
+        <div class="panel info-panel">
+            <div>
+                <div class="info-header">BRAINWAVE MD</div>
+                <ul class="status-list">
+                    <li><span class="status-dot"></span> Core Engine: ONLINE</li>
+                    <li><span class="status-dot"></span> Baileys Protocol: ACTIVE</li>
+                    <li><span class="status-dot" style="background:#00f3ff; box-shadow: 0 0 8px #00f3ff;"></span> Pairing Nodes: STANDBY</li>
+                </ul>
+                <div class="features">
+                    <p>> AI INTEGRATION: ENABLED</p>
+                    <p>> AUTO-MODERATION: ACTIVE</p>
+                    <p>> MEDIA PROCESSOR: READY</p>
+                    <br>
+                    <p style="color: #00f3ff;">SYS.VERSION: V2.0.0</p>
+                </div>
+            </div>
+            <div class="dev-tag">DEV: MR.JOEL & SHAHZAIB TECH</div>
+        </div>
+
+        <div class="panel console-panel">
+            <h2>LINK DEVICE</h2>
+            <div class="subtitle">ENTER NUMBER WITH COUNTRY CODE</div>
+
+            <input type="number" id="num" placeholder="e.g. 92331XXXXXXX" autocomplete="off">
+            <button id="pairBtn" onclick="getCode()">REQUEST PAIRING KEY</button>
+
+            <div class="terminal" id="terminal">
+                <div class="log-line">> WAITING FOR USER INPUT...</div>
+            </div>
+
+            <div id="codeDisplay"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        
+        function addLog(message, color = "#00ff00") {
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.style.color = color;
+            line.innerText = `> ${message}`;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        async function getCode() {
+            const number = document.getElementById('num').value;
+            if(!number) {
+                addLog("ERROR: NUMBER REQUIRED!", "#ff0000");
+                return;
+            }
+
+            // Reset UI
+            document.getElementById('codeDisplay').style.display = 'none';
+            document.getElementById('pairBtn').innerText = "PROCESSING...";
+            document.getElementById('pairBtn').disabled = true;
+            terminal.innerHTML = '';
+            
+            addLog("INITIALIZING HANDSHAKE...");
+            
+            setTimeout(() => addLog(`TARGET SET: +${number}`), 1000);
+            setTimeout(() => addLog("BYPASSING SECURITY PROTOCOLS..."), 2000);
+            setTimeout(() => addLog("REQUESTING KEY FROM WHATSAPP SERVER..."), 3500);
+
+            try {
+                // Yahan Vercel wale proxy api ko hit kar rahe hain! 😎
+                const response = await fetch(`/api/pair?number=${number}`);
+                const data = await response.json();
+                
+                if(data.code) {
+                    addLog("DECRYPTION SUCCESSFUL!", "#00f3ff");
+                    document.getElementById('codeDisplay').innerText = data.code;
+                    document.getElementById('codeDisplay').style.display = 'block';
+                } else {
+                    addLog("SYSTEM FAILURE: " + (data.error || "Unknown Error"), "#ff0000");
+                }
+            } catch (e) {
+                addLog("CONNECTION LOST. SERVER UNREACHABLE.", "#ff0000");
+            } finally {
+                document.getElementById('pairBtn').innerText = "REQUEST NEW KEY";
+                document.getElementById('pairBtn').disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
