@@ -40,15 +40,27 @@
             100% { transform: translateY(100%); }
         }
 
-        /* Layout Container */
+        /* Layout Container with STYLISH GOLDEN MARGINS */
         .dashboard {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             width: 95%;
             max-width: 1000px;
-            padding: 20px;
+            padding: 30px 20px;
             z-index: 10;
+            position: relative;
+            
+            /* ⚡ The Golden Edges ⚡ */
+            border-left: 5px solid #ffd700; /* Solid Gold */
+            border-right: 5px solid #ffd700; 
+            border-radius: 20px; /* Smooth corners */
+            background: rgba(0, 0, 0, 0.4); /* Slight dark background to make gold pop */
+            box-shadow: 
+                -15px 0 30px -10px rgba(255, 215, 0, 0.5), /* Outer Gold Glow Left */
+                15px 0 30px -10px rgba(255, 215, 0, 0.5),  /* Outer Gold Glow Right */
+                inset -5px 0 15px -5px rgba(255, 215, 0, 0.2), /* Inner glow */
+                inset 5px 0 15px -5px rgba(255, 215, 0, 0.2);
         }
 
         /* Panels */
@@ -187,7 +199,7 @@
             <h2>LINK DEVICE</h2>
             <div class="subtitle">ENTER NUMBER WITH COUNTRY CODE</div>
 
-            <input type="number" id="num" placeholder="e.g. 92331XXXXXXX" autocomplete="off">
+            <input type="tel" id="num" placeholder="e.g. 92331XXXXXXX" autocomplete="off">
             <button id="pairBtn" onclick="getCode()">REQUEST PAIRING KEY</button>
 
             <div class="terminal" id="terminal">
@@ -201,6 +213,9 @@
 
     <script>
         const terminal = document.getElementById('terminal');
+        
+        // ⚡ Added Sleep Function for Synchronized Logs
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         
         function addLog(message, color = "#00ff00") {
             const line = document.createElement('div');
@@ -224,14 +239,17 @@
             document.getElementById('pairBtn').disabled = true;
             terminal.innerHTML = '';
             
+            // ⚡ SEQUENTIAL LOGGING (Ek ke baad ek)
             addLog("INITIALIZING HANDSHAKE...");
-            
-            setTimeout(() => addLog(`TARGET SET: +${number}`), 1000);
-            setTimeout(() => addLog("BYPASSING SECURITY PROTOCOLS..."), 2000);
-            setTimeout(() => addLog("REQUESTING KEY FROM WHATSAPP SERVER..."), 3500);
+            await sleep(800);
+            addLog(`TARGET SET: +${number}`);
+            await sleep(1000);
+            addLog("BYPASSING SECURITY PROTOCOLS...");
+            await sleep(1200);
+            addLog("REQUESTING KEY FROM WHATSAPP SERVER...");
 
             try {
-                // Yahan Vercel wale proxy api ko hit kar rahe hain! 😎
+                // Vercel API Bridge
                 const response = await fetch(`/api/pair?number=${number}`);
                 const data = await response.json();
                 
