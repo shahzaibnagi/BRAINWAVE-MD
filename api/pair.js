@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     try {
         // ⚡ Aapke VPS Bot ka Live Link (Jo aapne verify kiya hai)
-        const botUrl = `http://demmy.saturohost.xyz:25565/api/getcode?number=${number}`;
+        const botUrl = `http://BOT_BASE_URL/api/getcode?number=${number}`;
         
         console.log(`Fetching code for: ${number} from VPS...`);
         
