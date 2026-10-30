@@ -1,0 +1,11 @@
+node_modules/
+session/
+sessions/
+auth_info*/
+auth/
+creds.json
+.env
+.env.*
+*.log
+tmp/
+downloads/
