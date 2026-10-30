@@ -1,3 +1,11 @@
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:080b10,100:1f6feb&height=150&section=header&text=BRAINWAVE-MD&fontSize=32&fontColor=eaf0f7&animation=fadeIn&desc=Pairing%20UI%20%2B%20command%20layer&descAlignY=76&descSize=14" alt="BRAINWAVE-MD" />
+
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=500&size=16&pause=1200&color=34D399&center=true&vCenter=true&width=560&lines=31%20command%20modules;Vercel%20function%20in%20front%20of%20the%20bot" alt="tagline" />
+
+</div>
+
 # BRAINWAVE MD - pairing page
 
 <p align="center">
